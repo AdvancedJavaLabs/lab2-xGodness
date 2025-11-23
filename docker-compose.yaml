@@ -1,0 +1,110 @@
+services:
+  broker:
+    image: rabbitmq:4-management
+    environment:
+      RABBITMQ_DEFAULT_USER: $RABBITMQ_USER
+      RABBITMQ_DEFAULT_PASS: $RABBITMQ_PASSWORD
+    restart: unless-stopped
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_logs:/var/log/rabbitmq
+    healthcheck:
+      test: [ "CMD-SHELL", "rabbitmq-diagnostics -q ping || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    networks:
+      - application-network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile
+    depends_on:
+      broker:
+        condition: service_healthy
+    environment:
+      BROKER_HOST: $BROKER_HOST
+      BROKER_USER: $RABBITMQ_USER
+      BROKER_PASSWORD: $RABBITMQ_PASSWORD
+      CLIENT_START_WRITE_QUEUE: $CLIENT_START_WRITE_QUEUE
+      CLIENT_TIME_INFO_READ_QUEUE: $CLIENT_TIME_INFO_READ_QUEUE
+      CLIENT_TIME_INFO_WRITE_QUEUE: $CLIENT_TIME_INFO_WRITE_QUEUE
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      - application-network
+
+  splitter:
+    build:
+      context: ./splitter
+      dockerfile: ./Dockerfile
+    depends_on:
+      broker:
+        condition: service_healthy
+    environment:
+      BROKER_HOST: $BROKER_HOST
+      BROKER_USER: $RABBITMQ_USER
+      BROKER_PASSWORD: $RABBITMQ_PASSWORD
+      SPLITTER_BATCHES_INFO_WRITE_QUEUE: $SPLITTER_BATCHES_INFO_WRITE_QUEUE
+      SPLITTER_READ_QUEUE: $SPLITTER_READ_QUEUE
+      SPLITTER_WRITE_QUEUE: $SPLITTER_WRITE_QUEUE
+      SOURCE_TEXT_FILENAME: $SOURCE_TEXT_FILENAME
+      SENTENCES_PER_BATCH: $SENTENCES_PER_BATCH
+    restart: unless-stopped
+    networks:
+      - application-network
+
+  processor:
+    build:
+      context: ./processor
+      dockerfile: ./Dockerfile
+    depends_on:
+      broker:
+        condition: service_healthy
+    environment:
+      BROKER_HOST: $BROKER_HOST
+      BROKER_USER: $RABBITMQ_USER
+      BROKER_PASSWORD: $RABBITMQ_PASSWORD
+      PROCESSOR_READ_QUEUE: $PROCESSOR_READ_QUEUE
+      PROCESSOR_WRITE_QUEUE: $PROCESSOR_WRITE_QUEUE
+      NAME_REPLACEMENT: $NAME_REPLACEMENT
+      NAMES_FILENAME: $NAMES_FILENAME
+      POSITIVE_WORDS_FILENAME: $POSITIVE_WORDS_FILENAME
+      NEGATIVE_WORDS_FILENAME: $NEGATIVE_WORDS_FILENAME
+    restart: unless-stopped
+    networks:
+      - application-network
+
+  aggregator:
+    build:
+      context: ./aggregator
+      dockerfile: ./Dockerfile
+    depends_on:
+      broker:
+        condition: service_healthy
+    environment:
+      BROKER_HOST: $BROKER_HOST
+      BROKER_USER: $RABBITMQ_USER
+      BROKER_PASSWORD: $RABBITMQ_PASSWORD
+      TOP_N_VALUE: $TOP_N_VALUE
+      AGGREGATOR_BATCHES_INFO_READ_QUEUE: $AGGREGATOR_BATCHES_INFO_READ_QUEUE
+      AGGREGATOR_BATCHES_READ_QUEUE: $AGGREGATOR_BATCHES_READ_QUEUE
+      AGGREGATOR_TIME_INFO_WRITE_QUEUE: $AGGREGATOR_TIME_INFO_WRITE_QUEUE
+      AGGREGATOR_TIME_INFO_READ_QUEUE: $AGGREGATOR_TIME_INFO_READ_QUEUE
+    restart: unless-stopped
+    networks:
+      - application-network
+
+volumes:
+  rabbitmq_data:
+  rabbitmq_logs:
+
+networks:
+  application-network:
+    driver: bridge
