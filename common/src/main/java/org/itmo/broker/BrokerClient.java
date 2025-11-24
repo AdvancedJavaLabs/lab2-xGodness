@@ -1,14 +1,16 @@
 package org.itmo.broker;
 
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
+import org.itmo.util.EnvReader;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import lombok.extern.slf4j.Slf4j;
-import org.itmo.util.EnvReader;
 
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class BrokerClient {

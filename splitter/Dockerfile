@@ -3,7 +3,7 @@ WORKDIR /app
 
 COPY build/libs/splitter.jar splitter.jar
 
-ENV JAVA_OPTS=""
+ENV JAVA_OPTS="-Xms8g -Xmx16g"
 
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar splitter.jar"]
 

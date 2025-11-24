@@ -1,11 +1,11 @@
 package org.itmo;
 
-import org.itmo.dto.BatchProcessingResult;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
+
+import org.itmo.dto.BatchProcessingResult;
 
 public class ResultsAggregator {
     private int wordCount;
@@ -41,17 +41,8 @@ public class ResultsAggregator {
                 )
                 .positiveWordsCount(positiveWordsCount)
                 .negativeWordsCount(negativeWordsCount)
-                .sortedSentences(
-                        sentencesLengthQueue.stream().map(sentence -> sentence.text).toArray(String[]::new)
-                )
+                .sentencesLengthQueue(sentencesLengthQueue)
                 .computeTime(computeTime)
                 .build();
-    }
-
-    private record Sentence(String text, int length) implements Comparable<Sentence> {
-        @Override
-        public int compareTo(Sentence sentence) {
-            return Integer.compare(this.length, sentence.length);
-        }
     }
 }

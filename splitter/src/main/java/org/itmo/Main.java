@@ -1,9 +1,10 @@
 package org.itmo;
 
-import lombok.extern.slf4j.Slf4j;
 import org.itmo.broker.BrokerReader;
 import org.itmo.broker.BrokerWriter;
 import org.itmo.util.EnvReader;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Main {

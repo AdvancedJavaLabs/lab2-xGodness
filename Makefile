@@ -2,7 +2,7 @@ common:
 	@cd ./common && ./gradlew --no-daemon shadowJar
 
 client:
-	@cd ./client && ./gradlew --no-daemon shadowJar
+	@cd ./client && ./gradlew --no-daemon bootJar
 
 splitter:
 	@cd ./splitter && ./gradlew --no-daemon shadowJar
@@ -20,3 +20,7 @@ build: common client splitter processor aggregator
 up:
 	@docker compose --env-file .env up --build --remove-orphans -d
 	@docker compose logs -f
+
+save:
+	@mkdir -p results
+	@docker cp lab2-xgodness-aggregator-1:/app/results/. results/ || true

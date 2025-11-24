@@ -1,14 +1,15 @@
 package org.itmo;
 
-import lombok.extern.slf4j.Slf4j;
-import org.itmo.util.EnvReader;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.itmo.util.EnvReader;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SentimentAnalyzer {

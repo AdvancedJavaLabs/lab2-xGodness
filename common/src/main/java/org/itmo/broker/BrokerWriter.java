@@ -1,9 +1,9 @@
 package org.itmo.broker;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BrokerWriter extends BrokerClient {

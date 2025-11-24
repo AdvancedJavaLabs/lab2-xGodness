@@ -1,12 +1,15 @@
 package org.itmo;
 
-import org.itmo.dto.BatchProcessingResult;
-import org.itmo.util.EnvReader;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.itmo.dto.BatchProcessingResult;
+import org.itmo.util.EnvReader;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class BatchProcessor {
     private static final String NAME_REPLACEMENT = EnvReader.readEnvVar("NAME_REPLACEMENT");
 

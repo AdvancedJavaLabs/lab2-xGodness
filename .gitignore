@@ -2,3 +2,5 @@
 **/.gradle/
 **/build
 *.iml
+**/results/**
+splitter/src/main/resources/text.txt
