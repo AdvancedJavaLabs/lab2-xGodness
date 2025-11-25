@@ -88,11 +88,14 @@ services:
     depends_on:
       broker:
         condition: service_healthy
+    volumes:
+      - ./results:/app/results
     environment:
       BROKER_HOST: $BROKER_HOST
       BROKER_USER: $RABBITMQ_USER
       BROKER_PASSWORD: $RABBITMQ_PASSWORD
       TOP_N_VALUE: $TOP_N_VALUE
+      SOURCE_TEXT_FILENAME: $SOURCE_TEXT_FILENAME
       PROCESSOR_REPLICAS: $PROCESSOR_REPLICAS
       SENTENCES_PER_BATCH: $SENTENCES_PER_BATCH
       AGGREGATOR_BATCHES_INFO_READ_QUEUE: $AGGREGATOR_BATCHES_INFO_READ_QUEUE

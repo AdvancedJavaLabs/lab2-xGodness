@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Main {
     private static final int TOP_N_VALUE = Integer.parseInt(EnvReader.readEnvVar("TOP_N_VALUE"));
+    private static final String SOURCE_TEXT_FILENAME = EnvReader.readEnvVar("SOURCE_TEXT_FILENAME");
     private static final int PROCESSOR_REPLICAS = Integer.parseInt(EnvReader.readEnvVar("PROCESSOR_REPLICAS"));
     private static final int SENTENCES_PER_BATCH = Integer.parseInt(EnvReader.readEnvVar("SENTENCES_PER_BATCH"));
     private static final String BATCHES_INFO_READ_QUEUE = EnvReader.readEnvVar("AGGREGATOR_BATCHES_INFO_READ_QUEUE");
@@ -59,6 +60,7 @@ public class Main {
             resultWriter.println("COMPUTE TIME: %d".formatted(aggregationResult.getComputeTime()));
             resultWriter.println("PROCESSOR REPLICAS: %d".formatted(PROCESSOR_REPLICAS));
             resultWriter.println("SENTENCES PER BATCH: %d".formatted(SENTENCES_PER_BATCH));
+            resultWriter.println("SOURCE FILE : %s".formatted(SOURCE_TEXT_FILENAME));
             resultWriter.println("-".repeat(32));
             resultWriter.println("Word count: %d".formatted(aggregationResult.getWordCount()));
             resultWriter.println("Positive words count: %d".formatted(aggregationResult.getPositiveWordsCount()));

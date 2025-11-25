@@ -21,6 +21,5 @@ up:
 	@docker compose --env-file .env up --build --remove-orphans -d
 	@docker compose logs -f
 
-save:
-	@mkdir -p results
-	@docker cp lab2-xgodness-aggregator-1:/app/results/. results/ || true
+down:
+	@docker compose down
